@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Function to display top 10 applications by CPU and memory usage
+top_10_apps() {
+  echo "Top 10 Applications by CPU and Memory Usage:"
+  ps -eo pid,comm,%mem,%cpu --sort=-%mem | head -n 11
+  echo ""
+}
+
+# Function to monitor network statistics
+network_monitor() {
+  echo "Network Monitoring:"
+  echo "Concurrent Connections:"
+  ss -s | grep "TCP:"
+  echo "Packet Drops:"
+  netstat -s | grep "packet loss"
+  echo "MB in/out:"
+  ifconfig | grep "RX bytes\|TX bytes"
+  echo ""
+}
+
+# Function to monitor disk usage
+disk_usage() {
+  echo "Disk Usage:"
+  df -h | awk '$5 > 80 {print "Warning: " $0} $5 <= 80 {print $0}'
+  echo ""
+}
+
+# Function to monitor system load
+system_load() {
+  echo "System Load:"
+  uptime
+  echo "CPU Usage Breakdown:"
+  mpstat | grep -A 5 "%idle"
+  echo ""
+}
+
+# Function to monitor memory usage
+memory_usage() {
+  echo "Memory Usage:"
+  free -h
+  echo ""
+}
+
+# Function to monitor processes
+process_monitor() {
+  echo "Process Monitoring:"
+  ps -eo pid,comm,%mem,%cpu --sort=-%cpu | head -n 6
+  echo ""
+}
+
+# Function to monitor services
+service_monitor() {
+  echo "Service Monitoring:"
+  systemctl is-active sshd nginx apache2 iptables
+  echo ""
+}
